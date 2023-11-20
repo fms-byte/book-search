@@ -1,0 +1,43 @@
+<html>
+
+<head>
+	<title>Books API</title>
+</head>
+
+<body>
+	<div id="search">
+	  <h1>Welcome to Book World!</h1>
+		<form id="search-form">
+			<label for="input">Search Book: </label>
+			<input type="text" placeholder="Search Books" value="" id="input">
+			<button type="button" onclick="searchBooks()">Search</button>
+		</form>
+	</div>
+	<div id="content"></div>
+	<script>
+		function searchBooks() {
+      const input = document.getElementById("input").value;
+      const script = document.createElement("script");
+
+      script.src = `https://www.googleapis.com/books/v1/volumes?q=${input}&callback=handleResponse`;
+      document.head.appendChild(script);
+    }
+
+    function handleResponse(response) {
+      const content = document.getElementById("content");
+      content.innerHTML = "<h1>Related Book List</h1><hr>";
+
+      for (let i = 0; i < response.items.length; i++) {
+        const item = response.items[i];
+        const pushIntoHtml = document.getElementById("content");
+
+        pushIntoHtml.innerHTML += `<br><img src="${item.volumeInfo.imageLinks.thumbnail}">`;
+        pushIntoHtml.innerHTML += `<br><h3>Book ${i + 1}: ${item.volumeInfo.title}</h3><p>Author: <b>${item.volumeInfo.authors}</b></p>`;
+        pushIntoHtml.innerHTML += `<p><b>Description:</b> ${item.volumeInfo.description}</p>`;
+        pushIntoHtml.innerHTML += `<p><a href="${item.volumeInfo.canonicalVolumeLink} ">Click</a> to see book</p><br><hr>`;
+      }
+    }
+	</script>
+</body>
+
+</html>
